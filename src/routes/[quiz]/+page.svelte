@@ -22,6 +22,7 @@
 		submitted = false;
 		currentQuestion++;
 		selectedAnswer = ' ';
+
 		progress.update((n) => {
 			if (n + 0.1 > 1) {
 				return 1;
@@ -30,6 +31,24 @@
 			}
 		});
 	}
+
+	function saveScore() {
+		localStorage.setItem('score', score);
+		localStorage.setItem('currentQuestion', currentQuestion);
+		localStorage.setItem('selectedAnswer', selectedAnswer);
+	}
+
+	$effect(() => {
+		if (localStorage.getItem('score')) {
+			score = parseInt(localStorage.getItem('score'), 10) || 0;
+		}
+		if (localStorage.getItem('currentQuestion')) {
+			currentQuestion = parseInt(localStorage.getItem('currentQuestion'), 10) || 0;
+		}
+		if (localStorage.getItem('progress')) {
+			selectedAnswer = localStorage.getItem('currentQuestion');
+		}
+	});
 </script>
 
 <progress value={$progress}></progress>
@@ -62,6 +81,8 @@
 	{:else}
 		<button class="btn btn-primary" onclick={nextQuestion}>Next Question</button>
 	{/if}
+
+	<h1>Punkte:{score}</h1>
 {:else}
 	<h2>Game Over!</h2>
 	<p>You scored {score} out of {data.questions.length} points!</p>
